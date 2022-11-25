@@ -1,0 +1,32 @@
+use dolegae;
+
+-- lab 4 zadanie 1 --
+select * from postac;
+select * from postac where rodzaj = 'wiking' order by data_ur asc limit 2;
+
+-- alter table drop primary key;
+-- nie pójdzie bo są obce
+show create table przetwory;
+alter table przetwory drop foreign key przetwory_ibfk_1;  
+alter table przetwory drop foreign key przetwory_ibfk_2;  
+alter table walizka drop foreign key walizka_ibfk_2;  
+alter table walizka drop foreign key walizka_ibfk_1;  
+alter table walizka drop foreign key walizka_ibfk_3;  
+alter table postac change id_postaci id_postaci int;
+alter table postac drop primary key;
+alter table postac add pesel char(11) first;
+alter table postac change pesel pesel char(11) PRIMARY KEY first;
+select * from postac;
+update postac set pesel=1;
+alter table postac change pesel pesel char(11) PRIMARY KEY first;
+update postac set pesel='12345678901'+id_postaci;
+alter table postac change pesel pesel char(11) PRIMARY KEY first;
+show create table postac;
+alter table postac change rodzaj rodzaj enum('wiking','syrena','ptak','kobieta')default null;
+insert into postac(id_postaci, nazwa, rodzaj) values (10, 'Gertruda Niszczera', 'syrena');
+select * from postac;
+-- lab4 zadanie 3
+select * from statek;
+alter table statek add nazwa varchar(30);
+update statek set nazwa='statek Bjorna'  where id_statku=1 ;
+update postac set id_statku=1 where nazwa regexp '[a]';
