@@ -1,0 +1,80 @@
+select * from statek;
+select * from postac;
+
+CREATE TABLE `marynarz` (
+  `pesel` char(11) DEFAULT NULL,
+  `id_postaci` int NOT NULL,
+  `nazwa` varchar(40) DEFAULT NULL,
+  `rodzaj` enum('wiking','syrena','ptak','kobieta','wonsz') DEFAULT NULL,
+  `data_ur` date DEFAULT NULL,
+  `wiek` int unsigned DEFAULT NULL,
+  `funkcja` varchar(20) DEFAULT NULL,
+  `id_statku` int DEFAULT NULL,
+  CONSTRAINT `marynarz_ibfk_1` FOREIGN KEY (`id_statku`) REFERENCES `statek` (`id_statku`) ON DELETE CASCADE
+)
+
+update postac set id_statku=null  where id_statku = 2;
+
+
+ALTER TABLE marynarz change id_postaci id_marynarza int primary key;
+ALTER TABLE marynarz ADD PRIMARY KEY(id_marynarza);
+
+update postac set id_statku=null;
+delete from postac where nazwa='wiking5';
+delete from statek;
+alter table postac drop foreign key postac_ibfk_1;
+alter table marynarz drop foreign key marynarz_ibfk_1;  
+drop table statek;
+
+create table zwierz (id_zwierza int primary key auto_increment, nazwa varchar(20), wiek int);
+
+insert into zwierz select id_postaci, nazwa, wiek from postac where rdozaj='ptak' or rodzaj='wonsz';
+
+use wikingowie;
+show tables;
+
+CREATE TABLE `kreatura` (
+  `idKreatury` int NOT NULL,
+  `nazwa` varchar(30) DEFAULT NULL,
+  `rodzaj` varchar(30) DEFAULT NULL,
+  `dataUr` date DEFAULT NULL,
+  `waga` int unsigned DEFAULT NULL,
+  `udzwig` int unsigned DEFAULT NULL,
+  PRIMARY KEY (`idKreatury`),
+  KEY `rodzaj` (`rodzaj`),
+  KEY `rodzaj_waga_idx` (`rodzaj`,`waga`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `zasob` (
+  `idZasobu` int NOT NULL AUTO_INCREMENT,
+  `nazwa` varchar(50) DEFAULT NULL,
+  `waga` float(6,2) DEFAULT NULL,
+  `ilosc` int unsigned DEFAULT NULL,
+  `dataPozyskania` date DEFAULT NULL,
+  `rodzaj` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`idZasobu`)
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `ekwipunek` (
+  `idEkwipunku` int NOT NULL AUTO_INCREMENT,
+  `idKreatury` int DEFAULT NULL,
+  `idZasobu` int DEFAULT NULL,
+  `ilosc` int unsigned DEFAULT NULL,
+  PRIMARY KEY (`idEkwipunku`),
+  KEY `kreatur` (`idKreatury`),
+  KEY `idZasobu` (`idZasobu`),
+  CONSTRAINT `ekwipunek_ibfk_1` FOREIGN KEY (`idKreatury`) REFERENCES `kreatura` (`idKreatury`),
+  CONSTRAINT `ekwipunek_ibfk_2` FOREIGN KEY (`idZasobu`) REFERENCES `zasob` (`idZasobu`)
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
+
+insert into dolegae.zasob select * from wikingowie.zasob;
+insert into dolegae.kreatura select * from wikingowie.kreatura;
+insert into dolegae.ekwipunek select * from wikingowie.ekwipunek;
+
+
+select * from zasob;
+select * from zasob where rodzaj='jedzenie';
+select ekwipunek.idZasobu, ekwipunek.ilosc from zasob join ekwipunek on ekwipunek.idZasobu=zasob.idZasobu join kreatura on kreatura.idKreatury=ekwipunek.idKreatury where ekwipunek.idKreatury IN (1,3,5);
+
+select ekwipunek.idZasobu, ekwipunek.ilosc from zasob join ekwipunek on ekwipunek.idZasobu=zasob.idZasobu join kreatura on kreatura.idKreatury=ekwipunek.idKreatury where not kreatura.rodzaj='wiedzma' and sum(ekwipunek.ilosc * zasob.waga group by ekwipunek.idKreatury) > 50 ;
+-- cos źle robię parę rzeczu tu
