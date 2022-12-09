@@ -1,0 +1,22 @@
+ydgfuh;
+use dolegae;
+select kreatura.nazwa from kreatura join ekwipunek on kreatura.idKreatury=ekwipunek.idKreatury 
+join zasob on ekwipunek.idZasobu=zasob.idZasobu where zasob.rodzaj = 'jedzenie';
+desc zasob;
+desc ekwipunek;
+select * from zasob;
+select * from kreatura;
+select kreatura.nazwa, zasob.nazwa from kreatura join ekwipunek on kreatura.idKreatury=ekwipunek.idKreatury 
+join zasob on ekwipunek.idZasobu=zasob.idZasobu
+where year(kreatura.dataUr) between 1670 and 1679;
+select concat(k1.nazwa, (" "),  k2.nazwa) as nazwy from kreatura k1 join kreatura k2 on k1.idKreatury=k2.idKreatury+5 where k1.idKreatury = k2.idKreatury + 5;
+select k.rodzaj, sum(e.ilosc*z.waga)/count(distinct(k.nazwa)) as waga1 from kreatura k join ekwipunek e on k.idKreatury=e.idKreatury 
+join zasob z on e.idZasobu=z.idZasobu where k.rodzaj not in ('malpa', 'waz') and e.ilosc > 30 group by k.rodzaj;
+
+select k1.rodzaj, max(k1.dataUr) as data_ur, k1.nazwa from kreatura k1 group by k1.rodzaj
+union
+select k2.rodzaj, min(k2.dataUr) as data_ur, k2.nazwa from kreatura k2 group by k2.rodzaj;
+#jeszcze raczej nie dobrze ostatnie
+sdidftgsdyif;
+use wikingowie;
+select * from kreatura left join uczestnicy on kreatura.idKreatury=uczestnicy.id_uczestnika where id_wyprawy is null;
