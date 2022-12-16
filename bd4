@@ -20,3 +20,6 @@ select k2.rodzaj, min(k2.dataUr) as data_ur, k2.nazwa from kreatura k2 group by 
 sdidftgsdyif;
 use wikingowie;
 select * from kreatura left join uczestnicy on kreatura.idKreatury=uczestnicy.id_uczestnika where id_wyprawy is null;
+SELECT w.nazwa, sum(e.ilosc) FROM wyprawa w inner join uczestnicy u ON w.id_wyprawy=u.id_wyprawy
+inner join ekwipunek e ON u.id_uczestnika=e.idKreatury
+group by w.id_wyprawy;
