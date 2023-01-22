@@ -58,3 +58,30 @@ FROM
      kreatura k ON k.idKreatury = w.kierownik
 ORDER BY w.data_rozpoczecia DESC , ew.kolejnosc ASC;
 
+
+sfusifhosdf;
+use wikingowie;
+-- zad 3.1
+SELECT 
+    s.nazwa, COUNT(ew.sektor) AS ile_odwiedzin
+FROM
+    sektor s
+        INNER JOIN
+    etapy_wyprawy ew ON s.id_sektora = ew.sektor
+GROUP BY s.id_sektora;
+ -- zad 3.2
+ SELECT 
+    *
+FROM
+    uczestnicy;
+    
+SELECT 
+    k.nazwa,
+    IF(COUNT(u.id_uczestnika) > 0,
+        'brał',
+        'nie brał') `if`
+FROM
+    kreatura k
+        INNER JOIN
+    uczestnicy u ON k.idKreatury = u.id_uczestnika
+GROUP BY k.idKreatury;
