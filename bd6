@@ -43,3 +43,24 @@ FROM
         JOIN
     zasob z ON e.idZasobu = z.idZasobu
 GROUP BY w.nazwa;
+
+ugfdiufh;
+use wikingowie;
+-- zad 5.2
+SELECT 
+    k.nazwa,
+    DATEDIFF(w.data_rozpoczecia, k.dataUr) tak,
+    k.dataUr,
+    w.data_rozpoczecia
+FROM
+    kreatura k
+        JOIN
+    uczestnicy u ON k.idKreatury = u.id_uczestnika
+        JOIN
+    wyprawa w ON u.id_wyprawy = w.id_wyprawy
+        JOIN
+    etapy_wyprawy ew ON u.id_wyprawy = ew.idWyprawy
+        JOIN
+    sektor s ON ew.sektor = s.id_sektora
+WHERE
+    s.nazwa = 'Chatka dziadka';
